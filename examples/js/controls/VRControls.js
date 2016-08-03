@@ -17,13 +17,8 @@ THREE.VRControls = function ( object, onError ) {
 
 		for ( var i = 0; i < displays.length; i ++ ) {
 
-			if ( ( 'VRDisplay' in window && displays[ i ] instanceof VRDisplay ) ||
-				 ( 'PositionSensorVRDevice' in window && displays[ i ] instanceof PositionSensorVRDevice ) ) {
-
-				vrDisplay = displays[ i ];
-				break;  // We keep the first we encounter
-
-			}
+			vrDisplay = displays[ i ];
+			break;  // We keep the first we encounter
 
 		}
 
@@ -35,16 +30,7 @@ THREE.VRControls = function ( object, onError ) {
 
 	}
 
-	if ( navigator.getVRDisplays ) {
-
-		navigator.getVRDisplays().then( gotVRDisplays );
-
-	} else if ( navigator.getVRDevices ) {
-
-		// Deprecated API.
-		navigator.getVRDevices().then( gotVRDisplays );
-
-	}
+	navigator.getVRDisplays().then( gotVRDisplays );
 
 	// the Rift SDK returns the position in meters
 	// this scale factor allows the user to define how meters
@@ -102,27 +88,6 @@ THREE.VRControls = function ( object, onError ) {
 
 				}
 
-			} else {
-
-				// Deprecated API.
-				var state = vrDisplay.getState();
-
-				if ( state.orientation !== null ) {
-
-					object.quaternion.copy( state.orientation );
-
-				}
-
-				if ( state.position !== null ) {
-
-					object.position.copy( state.position );
-
-				} else {
-
-					object.position.set( 0, 0, 0 );
-
-				}
-
 			}
 
 			if ( this.standing ) {
@@ -152,37 +117,9 @@ THREE.VRControls = function ( object, onError ) {
 
 		if ( vrDisplay ) {
 
-			if ( vrDisplay.resetPose !== undefined ) {
-
-				vrDisplay.resetPose();
-
-			} else if ( vrDisplay.resetSensor !== undefined ) {
-
-				// Deprecated API.
-				vrDisplay.resetSensor();
-
-			} else if ( vrDisplay.zeroSensor !== undefined ) {
-
-				// Really deprecated API.
-				vrDisplay.zeroSensor();
-
-			}
+			vrDisplay.resetPose();
 
 		}
-
-	};
-
-	this.resetSensor = function () {
-
-		console.warn( 'THREE.VRControls: .resetSensor() is now .resetPose().' );
-		this.resetPose();
-
-	};
-
-	this.zeroSensor = function () {
-
-		console.warn( 'THREE.VRControls: .zeroSensor() is now .resetPose().' );
-		this.resetPose();
 
 	};
 
