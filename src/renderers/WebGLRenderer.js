@@ -314,6 +314,20 @@ function WebGLRenderer( parameters ) {
 		} )
 	);
 
+	var backgroundSphereShader = ShaderLib[ 'basic' ];
+	var backgroundSphereMesh = new Mesh(
+		new SphereBufferGeometry( 5, 44, 38 ),
+		new ShaderMaterial( {
+			uniforms: backgroundSphereShader.uniforms,
+			vertexShader: backgroundSphereShader.vertexShader,
+			fragmentShader: backgroundSphereShader.fragmentShader,
+			side: BackSide,
+			depthTest: false,
+			depthWrite: false,
+			fog: false
+		} )
+	);
+
 	//
 
 	function getTargetPixelRatio() {
@@ -1208,6 +1222,7 @@ function WebGLRenderer( parameters ) {
 		//
 
 		var background = scene.background;
+		var backgroundMesh = scene.backgroundMesh;
 
 		if ( background === null ) {
 
@@ -1226,7 +1241,23 @@ function WebGLRenderer( parameters ) {
 
 		}
 
-		if ( background && background.isCubeTexture ) {
+		// NOTE: do want to use camera.projectMatrix as is?
+		// don't want to ignore camera near, far planes?
+		// can write a test case to figure out using existing cube, and then backgroundMesh
+		if ( background && backgroundMesh !== null ) {
+
+			backgroundCamera2.projectionMatrix.copy( camera.projectionMatrix );
+
+			backgroundCamera2.matrixWorld.extractRotation( camera.matrixWorld );
+			backgroundCamera2.matrixWorldInverse.getInverse( backgroundCamera2.matrixWorld );
+
+			backgroundMesh.modelViewMatrix.multiplyMatrices( backgroundCamera2.matrixWorldInverse, backgroundMesh.matrixWorld );
+
+			objects.update( backgroundMesh );
+
+			_this.renderBufferDirect( backgroundCamera2, null, backgroundMesh.geometry, backgroundMesh.material, backgroundMesh, null );
+
+		} else if ( background && background.isCubeTexture ) {
 
 			backgroundCamera2.projectionMatrix.copy( camera.projectionMatrix );
 
