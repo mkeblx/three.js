@@ -5,11 +5,11 @@
  * Based on @tojiro's vr-samples-utils.js
  */
 
-var WEBVR = {
+var WEBXR = {
 
 	createButton: function ( renderer ) {
 
-		function showEnterVR( display ) {
+		function showEnterVR( device ) {
 
 			button.style.display = '';
 
@@ -24,15 +24,17 @@ var WEBVR = {
 
 			button.onclick = function () {
 
-				display.isPresenting ? display.exitPresent() : display.requestPresent( [ { source: renderer.domElement } ] );
+				device.requestSession( { exclusive: true } ).then( onSessionStarted );
+
+				// display.isPresenting ? display.exitPresent() : display.requestPresent( [ { source: renderer.domElement } ] );
 
 			};
 
-			renderer.vr.setDevice( display );
+			renderer.vr.setDevice( device );
 
 		}
 
-		function showVRNotFound() {
+		function showXRNotFound() {
 
 			button.style.display = '';
 
@@ -40,7 +42,7 @@ var WEBVR = {
 			button.style.left = 'calc(50% - 75px)';
 			button.style.width = '150px';
 
-			button.textContent = 'VR NOT FOUND';
+			button.textContent = 'XR NOT FOUND';
 
 			button.onmouseenter = null;
 			button.onmouseleave = null;
@@ -68,7 +70,7 @@ var WEBVR = {
 
 		}
 
-		if ( 'getVRDisplays' in navigator ) {
+		if ( navigator.xr ) {
 
 			var button = document.createElement( 'button' );
 			button.style.display = 'none';
@@ -83,7 +85,7 @@ var WEBVR = {
 
 			window.addEventListener( 'vrdisplaydisconnect', function ( event ) {
 
-				showVRNotFound();
+				showXRNotFound();
 
 			}, false );
 
@@ -99,6 +101,28 @@ var WEBVR = {
 
 			}, false );
 
+			navigator.xr.requestDevice()
+				.then( function ( device ) {
+
+					if ( !device ) {
+
+						showXRNotFound();
+						return;
+
+					}
+
+					showEnterVR( device );
+
+					device.supportsSession( { exclusive: true } )
+						.then( function() {
+
+							showEnterVR( device );
+
+						} );
+
+			} );
+
+			// TODO: remove the below block
 			navigator.getVRDisplays()
 				.then( function ( displays ) {
 
@@ -108,7 +132,7 @@ var WEBVR = {
 
 					} else {
 
-						showVRNotFound();
+						showXRNotFound();
 
 					}
 
@@ -120,7 +144,7 @@ var WEBVR = {
 
 			var message = document.createElement( 'a' );
 			message.href = 'https://webvr.info';
-			message.innerHTML = 'WEBVR NOT SUPPORTED';
+			message.innerHTML = 'WEBXR NOT SUPPORTED';
 
 			message.style.left = 'calc(50% - 90px)';
 			message.style.width = '180px';

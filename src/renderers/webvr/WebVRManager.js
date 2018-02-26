@@ -7,7 +7,7 @@ import { Vector4 } from '../../math/Vector4.js';
 import { ArrayCamera } from '../../cameras/ArrayCamera.js';
 import { PerspectiveCamera } from '../../cameras/PerspectiveCamera.js';
 
-function WebVRManager( renderer ) {
+function WebXRManager( renderer ) {
 
 	var scope = this;
 
@@ -235,4 +235,4 @@ function WebVRManager( renderer ) {
 
 }
 
-export { WebVRManager };
+export { WebXRManager };

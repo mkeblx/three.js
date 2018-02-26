@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webvr - cubes</title>
+		<title>three.js webxr - cubes</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 		<!-- Origin Trial Token, feature = WebVR (For Chrome M62+), origin = https://threejs.org, expires = 2018-02-26 -->
@@ -23,7 +23,7 @@
 
 		<script src="../build/three.js"></script>
 
-		<script src="js/vr/WebVR.js"></script>
+		<script src="js/xr/WebXR.js"></script>
 
 		<script>
 
@@ -115,7 +115,7 @@
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.vr.enabled = true;
+				renderer.xr.enabled = true;
 				container.appendChild( renderer.domElement );
 
 				renderer.domElement.addEventListener( 'mousedown', onMouseDown, false );
@@ -127,10 +127,11 @@
 
 				//
 
-				window.addEventListener( 'vrdisplaypointerrestricted', onPointerRestricted, false );
-				window.addEventListener( 'vrdisplaypointerunrestricted', onPointerUnrestricted, false );
+				// TODO: remove
+				/*window.addEventListener( 'vrdisplaypointerrestricted', onPointerRestricted, false );
+				window.addEventListener( 'vrdisplaypointerunrestricted', onPointerUnrestricted, false );*/
 
-				document.body.appendChild( WEBVR.createButton( renderer ) );
+				document.body.appendChild( WEBXR.createButton( renderer ) );
 
 			}
 

@@ -21,7 +21,7 @@ import { WebGLTextures } from './webgl/WebGLTextures.js';
 import { WebGLProperties } from './webgl/WebGLProperties.js';
 import { WebGLState } from './webgl/WebGLState.js';
 import { WebGLCapabilities } from './webgl/WebGLCapabilities.js';
-import { WebVRManager } from './webvr/WebVRManager.js';
+import { WebXRManager } from './webxr/WebXRManager.js';
 import { WebGLExtensions } from './webgl/WebGLExtensions.js';
 import { Vector3 } from '../math/Vector3.js';
 import { WebGLClipping } from './webgl/WebGLClipping.js';
@@ -308,11 +308,11 @@ function WebGLRenderer( parameters ) {
 
 	initGLContext();
 
-	// vr
+	// xr
 
-	var vr = new WebVRManager( _this );
+	var xr = new WebXRManager( _this );
 
-	this.vr = vr;
+	this.xr = xr;
 
 	// shadow map
 
@@ -375,11 +375,11 @@ function WebGLRenderer( parameters ) {
 
 	this.setSize = function ( width, height, updateStyle ) {
 
-		var device = vr.getDevice();
+		var device = xr.getDevice();
 
 		if ( device && device.isPresenting ) {
 
-			console.warn( 'THREE.WebGLRenderer: Can\'t change size while VR device is presenting.' );
+			console.warn( 'THREE.WebGLRenderer: Can\'t change size while XR device is presenting.' );
 			return;
 
 		}
@@ -525,7 +525,7 @@ function WebGLRenderer( parameters ) {
 		properties.dispose();
 		objects.dispose();
 
-		vr.dispose();
+		xr.dispose();
 
 		stopAnimation();
 
@@ -1061,7 +1061,7 @@ function WebGLRenderer( parameters ) {
 
 	function requestAnimationLoopFrame() {
 
-		var device = vr.getDevice();
+		var device = xr.getDevice();
 
 		if ( device && device.isPresenting ) {
 
@@ -1119,9 +1119,9 @@ function WebGLRenderer( parameters ) {
 
 		if ( camera.parent === null ) camera.updateMatrixWorld();
 
-		if ( vr.enabled ) {
+		if ( xr.enabled ) {
 
-			camera = vr.getCamera( camera );
+			camera = xr.getCamera( camera );
 
 		}
 
@@ -1225,9 +1225,9 @@ function WebGLRenderer( parameters ) {
 
 		scene.onAfterRender( _this, scene, camera );
 
-		if ( vr.enabled ) {
+		if ( xr.enabled ) {
 
-			vr.submitFrame();
+			xr.submitFrame();
 
 		}
 
