@@ -70,7 +70,7 @@ import { Skeleton } from './objects/Skeleton.js';
 import { WebGLRenderer } from './renderers/WebGLRenderer.js';
 import { WebGLRenderTarget } from './renderers/WebGLRenderTarget.js';
 import { WebGLShadowMap } from './renderers/webgl/WebGLShadowMap.js';
-import { WebVRManager } from './renderers/webvr/WebVRManager.js';
+import { WebXRManager } from './renderers/webxr/WebXRManager.js';
 import { Shape } from './extras/core/Shape.js';
 import { CubeCamera } from './cameras/CubeCamera.js';
 
@@ -1587,12 +1587,12 @@ Object.defineProperties( WebGLRenderTarget.prototype, {
 
 //
 
-Object.defineProperties( WebVRManager.prototype, {
+Object.defineProperties( WebXRManager.prototype, {
 
 	standing: {
 		set: function ( /* value */ ) {
 
-			console.warn( 'THREE.WebVRManager: .standing has been removed.' );
+			console.warn( 'THREE.WebXRManager: .standing has been removed.' );
 
 		}
 	}
